@@ -1,22 +1,22 @@
 library(stats)
-source('~/GitHub/SDS383D-course-work/Project/functions.R')
+source('~/GitHub/MCMC-SV/code/functions.R')
 
-x=0.01
+x=1
 sigma2=0.05
-mu=-3
-h=seq(from=1,to=10,by=0.01)
+mu=1
+h=seq(from=1,to=6,by=0.001)
 s=(1-2*exp(sigma2))/(1-exp(sigma2))+0.5
 r=(s-1)*exp(mu+sigma2/2)+x^2/2
 qmode=r/(1+s)
-c=p(x,qmode,sigma2,mu)/dinvgamma(qmode,scale=r,shape=s)
-plot(p(x,h,sigma2,mu)~h,type='l',col="black",ylab="")
+c=exp(ln_p(x,qmode,sigma2,mu))/dinvgamma(qmode,scale=r,shape=s)
+plot(exp(ln_p(x,h,sigma2,mu))~h,type='l',col="black",ylim=c(0,0.25),ylab="",xlab="x")
 lines(c*dinvgamma(h,shape=s,scale=r)~h,col="blue")
 lines(1.1*c*dinvgamma(h,shape=s,scale=r)~h,col="red")
 lines(1.2*c*dinvgamma(h,shape=s,scale=r)~h,col="green")
-legend(x=6.8,y=0.25,legend=c("p","c=1","c=1.1","c=1.2"),fill=c("black","blue","red","green"))
+legend(x=4.8,y=0.20,legend=c("p","c=b","c=1.1b","c=1.2b"),fill=c("black","blue","red","green"))
 
 
-sp <- read.csv("~/GitHub/SDS383D-course-work/Project/SP.csv")
+sp <- read.csv("~/GitHub/MCMC-SV/data/SP.csv")
 n=length(sp$Close)
 logchange=log(sp$Close[2:n])-log(sp$Close[1:(n-1)])
 plot(logchange,type='l',xlab='',ylab='log of price')
